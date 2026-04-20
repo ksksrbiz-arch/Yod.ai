@@ -1,0 +1,15 @@
+{
+  "name": "@openyoda/chrome-extension",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Wisdom on every page. Highlight any text, summon Yoda.",
+  "scripts": {
+    "dev": "echo 'chrome-extension: dev not implemented'",
+    "build": "echo 'chrome-extension: build not implemented'",
+    "lint": "echo 'chrome-extension: lint not implemented'"
+  },
+  "dependencies": {
+    "@openyoda/sdk": "*",
+    "@openyoda/ui": "*"
+  }
+}

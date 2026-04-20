@@ -1,0 +1,16 @@
+{
+  "name": "openyoda",
+  "version": "0.0.1",
+  "private": true,
+  "description": "npx openyoda — Yoda in your terminal.",
+  "bin": { "openyoda": "src/index.ts" },
+  "scripts": {
+    "dev": "echo 'cli: dev not implemented'",
+    "build": "echo 'cli: build not implemented'",
+    "lint": "echo 'cli: lint not implemented'"
+  },
+  "dependencies": {
+    "@openyoda/core": "*",
+    "@openyoda/sdk": "*"
+  }
+}

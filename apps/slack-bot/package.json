@@ -1,0 +1,16 @@
+{
+  "name": "@openyoda/slack-bot",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Yoda in Slack. Mention, DM, slash-commands.",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "echo 'slack-bot: dev not implemented'",
+    "build": "echo 'slack-bot: build not implemented'",
+    "lint": "echo 'slack-bot: lint not implemented'"
+  },
+  "dependencies": {
+    "@openyoda/core": "*",
+    "@openyoda/prompts": "*"
+  }
+}

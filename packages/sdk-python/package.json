@@ -1,0 +1,11 @@
+{
+  "name": "@openyoda/sdk-python-placeholder",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Placeholder so the npm workspace recognises this folder. The actual Python package lives in pyproject.toml + openyoda/.",
+  "scripts": {
+    "build": "echo 'sdk-python: build via poetry/uv, not npm'",
+    "test": "echo 'sdk-python: test via pytest, not npm'",
+    "lint": "echo 'sdk-python: lint via ruff, not npm'"
+  }
+}
