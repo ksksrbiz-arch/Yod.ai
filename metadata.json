@@ -1,0 +1,8 @@
+{
+  "name": "Jedi Holocron Terminal",
+  "description": "A terminal powered by the Force featuring Yoda's wisdom, Live API voice, image/video generation, and analysis capabilities.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": []
+}
