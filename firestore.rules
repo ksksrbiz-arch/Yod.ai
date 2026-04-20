@@ -1,0 +1,75 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Phase 3: Primitive Definition
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null && request.auth.token.email_verified == true; }
+    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
+
+    // Validation Blueprint - User
+    function isValidUser(data) {
+      return data.keys().hasOnly(['email', 'name', 'createdAt', 'rank']) &&
+             data.keys().hasAll(['email', 'createdAt', 'rank']) &&
+             data.email is string && data.email.size() <= 256 &&
+             data.createdAt == request.time &&
+             data.rank in ['youngling', 'padawan', 'knight', 'master'] &&
+             (!('name' in data.keys()) || (data.name is string && data.name.size() <= 100));
+    }
+
+    // Validation Blueprint - Message
+    function isValidMessage(data, userId) {
+      return data.keys().hasOnly(['userId', 'role', 'text', 'createdAt']) &&
+             data.keys().hasAll(['userId', 'role', 'text', 'createdAt']) &&
+             data.userId == userId &&
+             data.role in ['user', 'model', 'action'] &&
+             data.text is string && data.text.size() <= 100000 &&
+             data.createdAt == request.time;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      // No blanket list!
+      allow list: if false; 
+
+      allow create: if isOwner(userId) && isValidId(userId) && 
+                    isValidUser(incoming()) && 
+                    incoming().rank == 'youngling';
+
+      allow update: if isOwner(userId) && isValidId(userId) &&
+                    isValidUser(incoming()) &&
+                    incoming().email == existing().email &&
+                    incoming().createdAt == existing().createdAt &&
+                    incoming().diff(existing()).affectedKeys().hasOnly(['name']); 
+                    // users cannot change their own rank!
+
+      allow delete: if false; // Require admin to delete users typically
+
+      // Messages Subcollection
+      match /messages/{messageId} {
+        // Only owner of the parent user can read
+        allow get: if isOwner(userId) && isValidId(messageId);
+        
+        // List explicitly checks that they are the owner
+        allow list: if isOwner(userId) && resource.data.userId == request.auth.uid;
+
+        // Atomicity check: Ensure parent user exists.
+        allow create: if isOwner(userId) && isValidId(messageId) &&
+                      isValidMessage(incoming(), userId) &&
+                      exists(/databases/$(database)/documents/users/$(userId));
+
+        // Immutable messages! Holocron records are permanent.
+        allow update, delete: if false;
+      }
+    }
+  }
+}

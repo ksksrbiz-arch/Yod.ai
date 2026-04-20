@@ -127,26 +127,26 @@ export default function VisionHolocron() {
   };
   
   return (
-    <div className="flex flex-col h-full glass rounded-2xl py-8 px-6 md:px-10 overflow-hidden shadow-xl">
+    <div className="flex flex-col h-full bg-deep-forest/20 backdrop-blur rounded-2xl py-8 px-6 md:px-10 overflow-hidden shadow-2xl border border-force-green/20">
       
       <div className="max-w-2xl mx-auto w-full relative h-full flex flex-col">
         <div className="mb-10 text-center">
-            <h2 className="text-3xl font-serif text-emerald-400 mb-3 tracking-tight italic">Visions of the Force</h2>
-            <p className="text-slate-400 font-light text-sm md:text-base">Focus your mind. Describe what you wish to see, and the terminal shall reveal it.</p>
+            <h2 className="text-3xl font-headers text-force-green mb-3 opacity-90 transition-opacity">Visions of the Force</h2>
+            <p className="text-sage-green font-sans tracking-wide text-sm md:text-base">Focus your mind. Describe what you wish to see, and the terminal shall reveal it.</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-6 p-1.5 glass border border-white/5 rounded-full w-full max-w-md mx-auto">
+        <div className="grid grid-cols-2 gap-3 mb-6 p-1.5 bg-shadow-black/50 border border-force-green/20 rounded-full w-full max-w-md mx-auto">
           <button 
             onClick={() => setType('image')}
             disabled={loading}
-            className={cn("py-2.5 rounded-full flex items-center justify-center gap-2 text-xs uppercase tracking-widest font-bold transition-colors disabled:opacity-50", type === 'image' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 glow-emerald" : "text-slate-500 hover:text-slate-300 border border-transparent")}
+            className={cn("py-2.5 rounded-full flex items-center justify-center gap-2 text-xs uppercase tracking-widest font-bold transition-colors disabled:opacity-50", type === 'image' ? "bg-force-green/10 text-force-green border border-force-green/30 glow-force" : "text-sage-green hover:text-crystal-white border border-transparent")}
           >
             <ImageIcon size={16}/> Still Vision
           </button>
           <button 
             onClick={() => setType('video')}
             disabled={loading}
-            className={cn("py-2.5 rounded-full flex items-center justify-center gap-2 text-xs uppercase tracking-widest font-bold transition-colors disabled:opacity-50", type === 'video' ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 glow-emerald" : "text-slate-500 hover:text-slate-300 border border-transparent")}
+            className={cn("py-2.5 rounded-full flex items-center justify-center gap-2 text-xs uppercase tracking-widest font-bold transition-colors disabled:opacity-50", type === 'video' ? "bg-force-green/10 text-force-green border border-force-green/30 glow-force" : "text-sage-green hover:text-crystal-white border border-transparent")}
           >
             <Video size={16}/> Moving Vision
           </button>
@@ -158,9 +158,9 @@ export default function VisionHolocron() {
             onChange={(e) => setPrompt(e.target.value)}
             disabled={loading}
             placeholder="A vibrant nebula deep in the outer rim territories..."
-            className="w-full bg-transparent glass border border-white/5 focus:border-emerald-500/50 outline-none rounded-2xl px-6 py-5 text-xl font-light text-slate-100 placeholder:text-slate-700 transition-all min-h-[140px] resize-none disabled:opacity-50"
+            className="w-full bg-shadow-black/80 border border-force-green/30 focus:border-force-green outline-none rounded-2xl px-6 py-5 text-xl font-sans text-crystal-white placeholder:text-sage-green/50 transition-all min-h-[140px] resize-none disabled:opacity-50 shadow-inner focus:ring-1 focus:ring-force-green"
           />
-          <div className="absolute bottom-4 right-4 text-[10px] text-slate-500 font-bold tracking-widest uppercase">
+          <div className="absolute bottom-4 right-4 text-[10px] text-sage-green font-mono tracking-widest uppercase opacity-70">
             Model: {type === 'image' ? 'Gemini 3.1 Flash Image' : 'Veo 3.1 Generation'}
           </div>
         </div>
@@ -173,8 +173,8 @@ export default function VisionHolocron() {
                   onClick={() => setAspectRatio(ratio)}
                   disabled={loading}
                   className={cn(
-                    "px-4 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all flex-1 sm:flex-none disabled:opacity-50",
-                    aspectRatio === ratio ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 glow-emerald" : "bg-transparent text-slate-500 border border-white/5 hover:bg-white/5"
+                    "px-4 py-2 rounded-full text-[10px] font-mono tracking-widest uppercase transition-all flex-1 sm:flex-none disabled:opacity-50",
+                    aspectRatio === ratio ? "bg-force-green/10 text-force-green border border-force-green/30 glow-force" : "bg-transparent text-sage-green border border-force-green/20 hover:bg-force-green/5 hover:text-crystal-white"
                   )}
                 >
                   {ratio}
@@ -185,7 +185,7 @@ export default function VisionHolocron() {
             <button
               disabled={!prompt.trim() || loading}
               onClick={handleManifest}
-              className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-8 py-3 rounded-full text-xs uppercase tracking-widest transition-all disabled:opacity-50 w-full sm:w-auto flex items-center justify-center gap-2 font-bold glow-emerald"
+              className="bg-force-green/10 hover:bg-force-green/20 text-force-green border border-force-green/30 shadow-[0_0_15px_rgba(127,176,105,0.1)] px-8 py-3 rounded-xl text-xs uppercase tracking-widest transition-all disabled:opacity-50 w-full sm:w-auto flex items-center justify-center gap-2 font-bold hover:shadow-[0_0_20px_rgba(127,176,105,0.3)]"
             >
               {loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
               {loading ? 'Meditating...' : 'Manifest Vision'}
@@ -193,25 +193,25 @@ export default function VisionHolocron() {
         </div>
 
         {/* Viewport for result */}
-        <div className="mt-12 flex-1 flex flex-col items-center justify-center border border-white/5 rounded-2xl glass relative overflow-hidden">
+        <div className="mt-12 flex-1 flex flex-col items-center justify-center border border-force-green/20 rounded-2xl bg-shadow-black/50 relative overflow-hidden shadow-inner">
              
              <AnimatePresence mode="wait">
                  {loading ? (
                     <motion.div key="loading" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="flex flex-col items-center justify-center absolute inset-0">
-                        <div className="w-16 h-16 rounded-full border border-emerald-500/30 flex items-center justify-center relative mb-4">
-                            <div className="absolute inset-0 rounded-full border-t border-emerald-400 animate-spin" style={{animationDuration: '2s'}}></div>
-                            <Sparkles size={24} className="text-emerald-400 opacity-60" />
+                        <div className="w-16 h-16 rounded-full border border-force-green/30 flex items-center justify-center relative mb-4">
+                            <div className="absolute inset-0 rounded-full border-t border-force-green animate-spin" style={{animationDuration: '2s'}}></div>
+                            <Sparkles size={24} className="text-force-green opacity-60" />
                         </div>
-                        <p className="text-emerald-500 text-[10px] font-bold tracking-widest uppercase animate-pulse">
+                        <p className="text-force-green/80 text-[10px] font-mono tracking-widest uppercase animate-pulse">
                             {type === 'video' ? 'Generating moving vision (may take minutes)...' : 'Communing with the Force...'}
                         </p>
                     </motion.div>
                  ) : errorMSG ? (
                     <motion.div key="error" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="flex flex-col items-center justify-center absolute inset-0 text-center px-6">
-                        <div className="w-12 h-12 rounded-full border border-red-500/30 bg-red-500/10 flex items-center justify-center mb-4">
-                            <Mountain size={20} className="text-red-400" />
+                        <div className="w-12 h-12 rounded-full border border-danger-red/30 bg-danger-red/10 flex items-center justify-center mb-4">
+                            <Mountain size={20} className="text-danger-red" />
                         </div>
-                        <p className="text-red-400 text-sm font-light max-w-sm">{errorMSG}</p>
+                        <p className="text-danger-red text-sm font-sans max-w-sm">{errorMSG}</p>
                     </motion.div>
                  ) : resultUrl ? (
                     <motion.div key="result" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="relative flex items-center justify-center w-full h-full p-2">
@@ -224,15 +224,15 @@ export default function VisionHolocron() {
                         <a 
                             href={resultUrl} 
                             download={type === 'image' ? "vision.png" : "vision.mp4"}
-                            className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-emerald-500 hover:text-black transition-all border border-white/10"
+                            className="absolute top-4 right-4 w-10 h-10 bg-shadow-black/70 backdrop-blur-md text-crystal-white rounded-full flex items-center justify-center hover:bg-force-green hover:text-shadow-black transition-all border border-force-green/30"
                         >
                             <Download size={18} />
                         </a>
                     </motion.div>
                  ) : (
                     <motion.div key="empty" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="flex flex-col items-center justify-center absolute inset-0">
-                        <Mountain size={48} className="text-slate-800 mb-4" />
-                        <p className="text-slate-600 text-[10px] font-bold tracking-widest uppercase">Viewport Empty</p>
+                        <Mountain size={48} className="text-deep-forest mb-4" />
+                        <p className="text-sage-green/60 text-[10px] font-mono tracking-widest uppercase">Viewport Empty</p>
                     </motion.div>
                  )}
              </AnimatePresence>
