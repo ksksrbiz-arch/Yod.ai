@@ -7,6 +7,7 @@ import { motion } from 'motion/react';
 import { useAuth } from '@/components/AuthProvider';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import WisdomCard from '@/components/WisdomCard';
 
 export default function ChatHolocron() {
   const [input, setInput] = useState('');
@@ -122,9 +123,9 @@ export default function ChatHolocron() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             key={i} 
-            className={cn("flex", msg.role === 'user' ? "flex-row-reverse" : "flex-row")}
+            className={cn("flex flex-col", msg.role === 'user' ? "items-end" : "items-start")}
           >
-            <div className="flex gap-3 max-w-[85%] md:max-w-[70%]">
+            <div className={cn("flex gap-3 max-w-[85%] md:max-w-[70%]", msg.role === 'user' ? "flex-row-reverse" : "flex-row")}>
               {(!msg.role || msg.role === 'model') ? (
                 <div className="w-8 h-8 rounded-full bg-force-green/10 border border-force-green/30 flex-shrink-0 flex items-center justify-center mt-1">
                    <span className="text-force-green text-xs font-headers font-bold">Y</span>
@@ -158,6 +159,12 @@ export default function ChatHolocron() {
                 )}
               </div>
             </div>
+            {msg.role !== 'user' && msg.text.match(/"([^"]+)"/) && (
+                <div className={cn("ml-11 mt-2 flex w-full max-w-[85%] md:max-w-[70%]")}>
+                    <WisdomCard quote={msg.text.match(/"([^"]+)"/)![1]} />
+                </div>
+            )}
+            
           </motion.div>
         ))}
         {loading && (
