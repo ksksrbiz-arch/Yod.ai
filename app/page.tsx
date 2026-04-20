@@ -1,136 +1,241 @@
 'use client';
 
-import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  MessageSquare, Mic, Image as ImageIcon, Video, 
-  Search, Eye, FileAudio, Settings, LogIn, LogOut
+import React from 'react';
+import Link from 'next/link';
+import { motion } from 'motion/react';
+import {
+  ArrowRight,
+  Sparkles,
+  Brain,
+  Compass,
+  Mic,
+  Share2,
+  Infinity as InfinityIcon,
+  Quote,
+  Star,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import Starfield from '@/components/Starfield';
+import HolocronAvatar from '@/components/HolocronAvatar';
 import { useAuth } from '@/components/AuthProvider';
-import { loginWithGoogle, logout } from '@/lib/firebase';
+import { loginWithGoogle } from '@/lib/firebase';
 
-const ChatHolocron = dynamic(() => import('@/components/ChatHolocron'), {
-  loading: () => <div className="h-full flex items-center justify-center font-mono text-xs uppercase tracking-widest text-emerald-500/50 animate-pulse">Initializing Chat Matrix...</div>
-});
-const VisionHolocron = dynamic(() => import('@/components/VisionHolocron'), {
-  loading: () => <div className="h-full flex items-center justify-center font-mono text-xs uppercase tracking-widest text-emerald-500/50 animate-pulse">Focusing Visions...</div>
-});
-const AudioHolocron = dynamic(() => import('@/components/AudioHolocron'), {
-  loading: () => <div className="h-full flex items-center justify-center font-mono text-xs uppercase tracking-widest text-emerald-500/50 animate-pulse">Attuning Frequencies...</div>
-});
-const LiveCommunionHolocron = dynamic(() => import('@/components/LiveCommunionHolocron'), { ssr: false,
-  loading: () => <div className="h-full flex items-center justify-center font-mono text-xs uppercase tracking-widest text-emerald-500/50 animate-pulse">Awakening Master Yoda...</div>
-});
+const TESTIMONIALS = [
+  { name: 'Mira K.', role: 'Founder', quote: 'It made my next move obvious. Three lines of Yoda dissolved a month of overthinking.' },
+  { name: 'Daniel R.', role: 'Engineer', quote: 'Like a meditation app and a strategy advisor had a baby. I open it daily.' },
+  { name: 'Aisha O.', role: 'Designer', quote: 'My screenshot folder is now 80% Yoda wisdom cards. Friends keep asking what app this is.' },
+];
 
-type Tab = 'chat' | 'voice' | 'vision' | 'audio';
+const FEATURES = [
+  { icon: Brain, title: 'Decision Engine', body: 'Hidden assumptions, emotional drivers, third paths — surfaced in seconds.' },
+  { icon: Compass, title: 'Multi-Domain Sage', body: 'Business, personal, creative, technical — one voice across the four.' },
+  { icon: Mic, title: 'Voice Communion', body: 'Speak. Listen. Yoda answers in his own voice. Hands-free wisdom.' },
+  { icon: Share2, title: 'Wisdom Cards', body: 'Every profound answer becomes a beautiful, shareable card. Story, square, wide.' },
+  { icon: Sparkles, title: 'Personal Memory', body: 'Tracks your patterns, growth, and recurring themes. Wisdom that compounds.' },
+  { icon: InfinityIcon, title: 'Daily Practice', body: 'Streaks, ranks, achievements. Wisdom is a habit, not an app.' },
+];
 
-export default function JediTerminal() {
-  const [activeTab, setActiveTab] = useState<Tab>('chat');
-  const { user, loading } = useAuth();
-
-  const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
-    { id: 'chat', label: 'Council Wisdom (Chat)', icon: <MessageSquare size={20} /> },
-    { id: 'voice', label: 'Live Communion (Voice)', icon: <Mic size={20} /> },
-    { id: 'vision', label: 'Force Visions (VFX)', icon: <ImageIcon size={20} /> },
-    { id: 'audio', label: 'Echoes (Transcribe)', icon: <FileAudio size={20} /> },
-  ];
+export default function Landing() {
+  const { user } = useAuth();
 
   return (
-    <div className="flex h-screen bg-shadow-black text-crystal-white font-sans overflow-hidden">
-      {/* Sidebar Navigation */}
-      <nav className="w-64 glass border-r-0 flex flex-col pt-6 pb-4 hidden md:flex z-20 relative shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
-        <div className="px-6 mb-10 pb-6 border-b border-white/5 flex items-center gap-3">
-          <div className="w-3 h-3 rounded-full bg-force-green shadow-[0_0_10px_#7FB069]"></div>
-          <h1 className="text-[14px] font-headers tracking-widest font-semibold text-crystal-white">Yod.ai</h1>
+    <div className="relative min-h-screen overflow-x-hidden bg-void-black">
+      <Starfield density={70} />
+
+      {/* Nav */}
+      <header className="relative z-30">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <span className="w-2.5 h-2.5 rounded-full bg-sage-green shadow-[0_0_12px_#7FB069] group-hover:scale-125 transition" />
+            <span className="font-headers font-semibold tracking-wide text-crystal-white">Yoda.ai</span>
+          </Link>
+          <nav className="hidden md:flex items-center gap-7 text-sm text-sage-green">
+            <a href="#features" className="hover:text-crystal-white transition">Features</a>
+            <a href="#testimonials" className="hover:text-crystal-white transition">Voices</a>
+            <Link href="/pricing" className="hover:text-crystal-white transition">Pricing</Link>
+            <Link href="/dashboard" className="hover:text-crystal-white transition">Dashboard</Link>
+          </nav>
+          <div className="flex items-center gap-3">
+            {!user ? (
+              <button onClick={loginWithGoogle} className="btn-ghost text-xs">Sign in</button>
+            ) : null}
+            <Link href="/chat" className="btn-primary text-xs">
+              Begin <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
-        
-        <div className="flex-1 flex flex-col gap-2 px-3">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "flex items-center gap-3 px-4 py-3 transition-all duration-300 text-xs tracking-wider font-medium rounded-xl",
-                activeTab === tab.id 
-                  ? "bg-force-green/20 text-force-green border border-force-green/30 glow-force" 
-                  : "text-sage-green hover:text-crystal-white hover:bg-deep-forest border border-transparent"
-              )}
-            >
-              <div className={cn("transition-colors duration-300", activeTab === tab.id ? "text-force-green" : "text-sage-green")}>
-                {tab.icon}
+      </header>
+
+      {/* Hero */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 pt-12 pb-24 md:pt-24 md:pb-32">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+          >
+            <p className="eyebrow mb-5">The wisdom platform · v1.0</p>
+            <h1 className="text-5xl md:text-7xl font-headers font-semibold leading-[1.05] tracking-tight">
+              <span className="headline">The only AI</span>
+              <br />
+              <span className="shimmer-text">that makes you wiser.</span>
+            </h1>
+            <p className="mt-6 text-lg text-sage-green max-w-lg leading-relaxed">
+              Ancient counsel for modern decisions. A premium AI sage trained to surface the third path, name the
+              hidden fear, and end the loop you have been spinning in.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Link href="/chat" className="btn-primary">
+                Ask Yoda <ArrowRight size={16} />
+              </Link>
+              <Link href="/pricing" className="btn-ghost">
+                See plans
+              </Link>
+            </div>
+            <div className="mt-8 flex items-center gap-5 text-xs text-sage-green/70">
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star key={i} size={12} className="fill-wisdom-gold text-wisdom-gold" />
+                ))}
               </div>
-              {tab.label}
-            </button>
+              <span>4.9 · across 2,300+ seekers</span>
+              <span className="hidden sm:inline">· 12K wisdom cards shared</span>
+            </div>
+          </motion.div>
+
+          {/* Holocron showpiece */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
+            className="relative flex justify-center"
+          >
+            <div className="relative">
+              <HolocronAvatar size={260} />
+              <motion.div
+                className="absolute -bottom-10 left-1/2 -translate-x-1/2 glass-strong rounded-2xl px-5 py-3 flex items-center gap-2 whitespace-nowrap shadow-2xl"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Quote size={14} className="text-wisdom-gold" />
+                <span className="font-headers italic text-sm text-crystal-white">
+                  "Do, or do not. There is no try."
+                </span>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Stats strip */}
+      <section className="relative z-10 max-w-6xl mx-auto px-6 py-10 border-y border-white/5 grid grid-cols-2 md:grid-cols-4 gap-6">
+        {[
+          { k: '2.3K', v: 'Daily seekers' },
+          { k: '12K', v: 'Wisdom cards shared' },
+          { k: '94%', v: 'Return next week' },
+          { k: '$4.97', v: 'Padawan tier · monthly' },
+        ].map((s) => (
+          <div key={s.v}>
+            <div className="text-3xl md:text-4xl font-headers font-semibold text-crystal-white">{s.k}</div>
+            <div className="text-xs uppercase tracking-widest font-mono text-sage-green/70 mt-1">{s.v}</div>
+          </div>
+        ))}
+      </section>
+
+      {/* Features */}
+      <section id="features" className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32">
+        <div className="max-w-2xl mb-14">
+          <p className="eyebrow mb-4">What makes it premium</p>
+          <h2 className="text-3xl md:text-5xl font-headers font-semibold tracking-tight headline">
+            A sage in your pocket. Not a chatbot in your tab.
+          </h2>
+          <p className="mt-5 text-sage-green text-lg leading-relaxed">
+            Built for the moments that matter — career pivots, hard conversations, creative blocks. Designed to be
+            kept, not closed.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {FEATURES.map((f, i) => (
+            <motion.div
+              key={f.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.5, delay: i * 0.05 }}
+              className="surface p-6 hover:border-sage-green/30 transition group"
+            >
+              <div className="w-11 h-11 rounded-xl glass flex items-center justify-center mb-4 group-hover:glow-force transition">
+                <f.icon size={18} className="text-sage-green" />
+              </div>
+              <h3 className="font-headers font-semibold text-lg text-crystal-white mb-1.5">{f.title}</h3>
+              <p className="text-sage-green/85 text-sm leading-relaxed">{f.body}</p>
+            </motion.div>
           ))}
         </div>
-        
-        <div className="px-6 mt-auto">
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-deep-forest to-transparent mb-4"></div>
-          {loading ? (
-             <p className="text-xs text-sage-green/60 tracking-wider font-medium">Checking resonance...</p>
-          ) : user ? (
-             <div className="flex flex-col gap-2">
-                 <p className="text-xs text-force-green tracking-wider font-medium flex items-center gap-2 select-none"><span className="w-1.5 h-1.5 rounded-full bg-force-green animate-pulse"></span> {user.displayName}</p>
-                 <button onClick={logout} className="text-xs text-sage-green hover:text-crystal-white transition-colors flex items-center gap-2 mt-1 py-2">
-                    <LogOut size={14} /> Sever Link
-                 </button>
-             </div>
-          ) : (
-             <button onClick={loginWithGoogle} className="w-full py-3 rounded-xl text-xs font-medium tracking-wider text-crystal-white bg-deep-forest/50 border border-force-green/20 hover:bg-force-green/20 hover:text-force-green transition-all flex items-center justify-center gap-2">
-                <LogIn size={14} /> Link Identity
-             </button>
-          )}
-        </div>
-      </nav>
+      </section>
 
-      {/* Main Content Area */}
-      <main className="flex-1 relative overflow-hidden flex flex-col bg-shadow-black">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 inset-x-0 h-[300px] bg-gradient-to-b from-force-green/10 to-transparent"></div>
+      {/* Testimonials */}
+      <section id="testimonials" className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <p className="eyebrow mb-4">Voices from the path</p>
+          <h2 className="text-3xl md:text-5xl font-headers font-semibold tracking-tight headline">
+            Quiet confidence, restored.
+          </h2>
         </div>
-        <div className="h-full p-0 flex flex-col relative z-10 w-full mx-auto">
-          <AnimatePresence mode="wait">
-            {activeTab === 'chat' && (
-              <motion.div key="chat" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full flex flex-col">
-                <ChatHolocron />
-              </motion.div>
-            )}
-            {activeTab === 'voice' && (
-              <motion.div key="voice" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full flex flex-col">
-                <LiveCommunionHolocron />
-              </motion.div>
-            )}
-            {activeTab === 'vision' && (
-              <motion.div key="vision" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full flex flex-col">
-                <VisionHolocron />
-              </motion.div>
-            )}
-            {activeTab === 'audio' && (
-              <motion.div key="audio" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full flex flex-col">
-                <AudioHolocron />
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="grid md:grid-cols-3 gap-5">
+          {TESTIMONIALS.map((t) => (
+            <div key={t.name} className="surface p-7">
+              <Quote size={18} className="text-wisdom-gold mb-4" />
+              <p className="text-crystal-white text-base leading-relaxed mb-5">"{t.quote}"</p>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-sage-green/15 border border-sage-green/30 flex items-center justify-center font-headers font-bold text-sage-green text-sm">
+                  {t.name[0]}
+                </div>
+                <div>
+                  <div className="text-sm text-crystal-white font-medium">{t.name}</div>
+                  <div className="text-xs text-sage-green/70">{t.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </main>
-      
-      {/* Mobile Navbar */}
-      <div className="md:hidden fixed bottom-4 left-4 right-4 glass flex justify-around p-2 z-50 rounded-2xl shadow-2xl border-force-green/30">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "p-3 rounded-xl flex items-center justify-center transition-all",
-              activeTab === tab.id ? "bg-force-green/20 text-force-green glow-force border border-force-green/30" : "text-sage-green hover:text-crystal-white"
-            )}
-          >
-            {tab.icon}
-          </button>
-        ))}
-      </div>
+      </section>
+
+      {/* CTA */}
+      <section className="relative z-10 max-w-4xl mx-auto px-6 py-24 md:py-32 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="surface p-12 md:p-16 relative overflow-hidden"
+        >
+          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(127,176,105,0.1), transparent 70%)' }} />
+          <div className="relative">
+            <p className="eyebrow mb-4">Begin your training</p>
+            <h2 className="text-3xl md:text-5xl font-headers font-semibold tracking-tight headline mb-5">
+              Three free questions, every day.
+            </h2>
+            <p className="text-sage-green text-lg max-w-xl mx-auto mb-8">
+              No card. No signup wall. Step in. Ask your hardest question. The Force will answer.
+            </p>
+            <Link href="/chat" className="btn-primary text-base px-7 py-4">
+              Begin <ArrowRight size={16} />
+            </Link>
+          </div>
+        </motion.div>
+      </section>
+
+      <footer className="relative z-10 max-w-7xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/5">
+        <div className="flex items-center gap-2 text-sm text-sage-green/70">
+          <span className="w-1.5 h-1.5 rounded-full bg-sage-green" />
+          Yoda.ai · Wisdom, distilled.
+        </div>
+        <div className="flex items-center gap-6 text-xs text-sage-green/60">
+          <Link href="/pricing" className="hover:text-crystal-white transition">Pricing</Link>
+          <Link href="/dashboard" className="hover:text-crystal-white transition">Dashboard</Link>
+          <Link href="/chat" className="hover:text-crystal-white transition">Chat</Link>
+        </div>
+      </footer>
     </div>
   );
 }

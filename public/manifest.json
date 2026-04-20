@@ -1,0 +1,19 @@
+{
+  "name": "Yoda.ai — The only AI that makes you wiser",
+  "short_name": "Yoda.ai",
+  "description": "Premium AI wisdom platform. Ancient counsel for modern decisions.",
+  "start_url": "/chat",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "lifestyle", "education"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
