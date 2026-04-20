@@ -1,0 +1,23 @@
+-- 0001_init.sql
+-- Scaffold for the public Supabase schema.
+-- The web app currently uses Firestore (see apps/web/firestore.rules).
+-- Migrating to Supabase is a follow-up; tables sketched below for reference.
+
+-- create table if not exists profiles (
+--   id uuid primary key references auth.users(id) on delete cascade,
+--   email text not null,
+--   display_name text,
+--   rank text not null default 'youngling' check (rank in ('youngling','padawan','knight','master')),
+--   wisdom_points int not null default 0,
+--   tier text not null default 'free' check (tier in ('free','padawan','master')),
+--   created_at timestamptz not null default now()
+-- );
+
+-- create table if not exists messages (
+--   id bigserial primary key,
+--   user_id uuid not null references profiles(id) on delete cascade,
+--   role text not null check (role in ('user','model','system')),
+--   text text not null,
+--   created_at timestamptz not null default now()
+-- );
+-- create index on messages (user_id, created_at);

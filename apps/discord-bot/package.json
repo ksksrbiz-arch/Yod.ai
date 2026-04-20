@@ -1,0 +1,16 @@
+{
+  "name": "@openyoda/discord-bot",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Yoda in Discord. Slash-commands and channel mentions.",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "echo 'discord-bot: dev not implemented'",
+    "build": "echo 'discord-bot: build not implemented'",
+    "lint": "echo 'discord-bot: lint not implemented'"
+  },
+  "dependencies": {
+    "@openyoda/core": "*",
+    "@openyoda/prompts": "*"
+  }
+}

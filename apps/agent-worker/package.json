@@ -1,0 +1,17 @@
+{
+  "name": "@openyoda/agent-worker",
+  "version": "0.0.1",
+  "private": true,
+  "description": "24/7 agent runtime — daily wisdom delivery, scheduled reflections, MCP tool execution.",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "echo 'agent-worker: dev not implemented'",
+    "build": "echo 'agent-worker: build not implemented'",
+    "lint": "echo 'agent-worker: lint not implemented'"
+  },
+  "dependencies": {
+    "@openyoda/core": "*",
+    "@openyoda/mcp-client": "*",
+    "@openyoda/prompts": "*"
+  }
+}

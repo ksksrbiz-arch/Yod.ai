@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Yoda.ai — wisdom on every page",
+  "version": "0.0.1",
+  "description": "Highlight any text, summon Yoda. Wisdom, distilled.",
+  "action": {
+    "default_title": "Ask Yoda about this page"
+  },
+  "permissions": ["activeTab", "storage", "contextMenus"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "src/background.js" },
+  "content_scripts": [
+    { "matches": ["<all_urls>"], "js": ["src/content.js"] }
+  ]
+}
